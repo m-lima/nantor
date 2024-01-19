@@ -1,10 +1,13 @@
 #include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/outputs.h>
 
 #define L_CLM 0
 #define L_QWT 1
 #define L_NUM 2
 #define L_FNS 3
+#define L_BLT 4
 
 / {
     keymap {
@@ -70,7 +73,7 @@
       * └───┤ ` │ 1 │ 2 │ 3 │ ] │       │Ins│Tab│Del│ ∆ │ ∆ ├───┘
       *     └───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
       *           ┌───┐                           ┌───┐
-      *           │ ∆ ├───┐                   ┌───┤ ∆ │
+      *           │ ∆ ├───┐                   ┌───┤BLT│
       *           └───┤ ∆ ├───┐           ┌───┤ ∆ ├───┘
       *               └───┤ ∆ ├───┐   ┌───┤ ∆ ├───┘
       *                   └───┤ ∆ │   │ ∆ ├───┘
@@ -81,7 +84,7 @@
                   &kp EQUAL &kp N7    &kp N8    &kp N9    &kp N0        &kp HOME  &kp PG_DN &kp PG_UP &kp END   &kp RSHFT
         &trans    &kp MINUS &kp N4    &kp N5    &kp N6    &kp LBKT      &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &kp RGUI  &kp RCTRL
         &trans    &kp GRAVE &kp N1    &kp N2    &kp N3    &kp RBKT      &kp INS   &kp TAB   &kp DEL   &trans    &trans    &kp RALT
-                            &trans    &trans    &trans    &trans        &trans    &trans    &trans    &trans
+                            &trans    &trans    &trans    &trans        &trans    &trans    &trans    &mo L_BLT
         >;
       };
 
@@ -89,10 +92,36 @@
      /*
       *     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
       * ┌───┤   │ F9│F10│F11│F12│       │   │ B-│ B+│   │   ├───┐
-      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤CLM│
+      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤   │
       * ├───┤Cap│ F5│ F6│ F7│ F8│       │   │ ◄ │ ‖ │ ► │   ├───┤
-      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤QWT│
+      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤   │
       * └───┤PSc│ F1│ F2│ F3│ F4│       │   │ V-│ V0│ V+│   ├───┘
+      *     └───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
+      *           ┌───┐                           ┌───┐
+      *           │ ∆ ├───┐                   ┌───┤ ∆ │
+      *           └───┤ ∆ ├───┐           ┌───┤ ∆ ├───┘
+      *               └───┤ ∆ ├───┐   ┌───┤BLT├───┘
+      *                   └───┤ ∆ │   │ ∆ ├───┘
+      *                       └───┘   └───┘
+      */
+
+        bindings =
+        <
+                  &none     &kp F9    &kp F10   &kp F11   &kp F12       &none  &kp C_BRI_DN &kp C_BRI_UP &none        &none
+        &trans    &kp CAPS  &kp F5    &kp F6    &kp F7    &kp F8        &none  &kp C_PREV   &kp C_PP     &kp C_NEXT   &none &none
+        &trans    &kp PSCRN &kp F1    &kp F2    &kp F3    &kp F4        &none  &kp C_VOL_DN &kp C_MUTE   &kp C_VOL_UP &none &none
+                            &trans    &trans    &trans    &trans        &trans &mo L_BLT    &trans       &trans
+        >;
+      };
+
+      bluetooth {
+     /*
+      *     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
+      * ┌───┤   │   │   │   │BTC│       │   │   │   │   │   ├───┐
+      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤CLM│
+      * ├───┤BLE│BT3│BT4│   │   │       │   │   │   │   │   ├───┤
+      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤QWT│
+      * └───┤USB│BT0│BT1│BT2│   │       │   │   │   │   │   ├───┘
       *     └───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
       *           ┌───┐                           ┌───┐
       *           │ ∆ ├───┐                   ┌───┤ ∆ │
@@ -104,10 +133,10 @@
 
         bindings =
         <
-                  &none     &kp F9    &kp F10   &kp F11   &kp F12       &none     &kp C_BRI_DN &kp C_BRI_UP &none        &none
-        &trans    &kp CAPS  &kp F5    &kp F6    &kp F7    &kp F8        &none     &kp C_PREV   &kp C_PP     &kp C_NEXT   &none     &to L_CLM
-        &trans    &kp PSCRN &kp F1    &kp F2    &kp F3    &kp F4        &none     &kp C_VOL_DN &kp C_MUTE   &kp C_VOL_UP &none     &to L_QWT
-                            &trans    &trans    &trans    &trans        &trans    &trans       &trans       &trans
+                  &none        &none        &none        &none        &bt BT_CLR    &none  &none  &none  &none  &none
+        &trans    &out OUT_BLE &bt BT_SEL 3 &bt BT_SEL 4 &none        &none         &none  &none  &none  &none  &none &to L_CLM
+        &trans    &out OUT_USB &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &none         &none  &none  &none  &none  &none &to L_QWT
+                               &trans       &trans       &trans       &trans        &trans &trans &trans &trans
         >;
       };
     };
