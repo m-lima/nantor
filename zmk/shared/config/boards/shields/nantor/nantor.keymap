@@ -1,0 +1,114 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+
+#define L_CLM 0
+#define L_QWT 1
+#define L_NUM 2
+#define L_FNS 3
+
+/ {
+    keymap {
+      compatible = "zmk,keymap";
+
+     /*
+      *     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
+      * ┌───┤ Q │ W │ F │ P │ B │       │ J │ L │ U │ Y │ ; ├───┐
+      * │Esc├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤ ' │
+      * ├───┤ A │ R │ S │ T │ G │       │ M │ N │ E │ I │ O ├───┤
+      * │Alt├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤ \ │
+      * └───┤ Z │ X │ C │ D │ V │       │ K │ H │ , │ . │ / ├───┘
+      *     └───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
+      *           ┌───┐                           ┌───┐
+      *           │Bsp├───┐                   ┌───┤FNS│
+      *           └───┤Spc├───┐           ┌───┤Ent├───┘
+      *               └───┤Sft├───┐   ┌───┤NUM├───┘
+      *                   └───┤ ⌘ │   │Ctl├───┘
+      *                       └───┘   └───┘
+      */
+      colemak {
+        bindings =
+        <
+                  &kp Q     &kp W     &kp F     &kp P     &kp B         &kp J     &kp L     &kp U     &kp Y     &kp SEMI
+        &kp ESC   &kp A     &kp R     &kp S     &kp T     &kp G         &kp M     &kp N     &kp E     &kp I     &kp O     &kp SQT
+        &kp LALT  &kp Z     &kp X     &kp C     &kp D     &kp V         &kp K     &kp H     &kp COMMA &kp DOT   &kp FSLH  &kp BSLH
+                            &kp BSPC  &kp SPACE &kp LSHFT &kp LGUI      &kp LCTRL &mo L_NUM &kp ENTER &mo L_FNS
+        >;
+      };
+
+     /*
+      *     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
+      * ┌───┤ Q │ W │ E │ R │ T │       │ Y │ U │ I │ O │ P ├───┐
+      * │Esc├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤ ' │
+      * ├───┤ A │ S │ D │ F │ G │       │ H │ J │ K │ L │ ; ├───┤
+      * │Alt├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤ \ │
+      * └───┤ Z │ X │ C │ V │ B │       │ N │ M │ , │ . │ / ├───┘
+      *     └───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
+      *           ┌───┐                           ┌───┐
+      *           │Bsp├───┐                   ┌───┤FNS│
+      *           └───┤Spc├───┐           ┌───┤Ent├───┘
+      *               └───┤Sft├───┐   ┌───┤NUM├───┘
+      *                   └───┤ ⌘ │   │Ctl├───┘
+      *                       └───┘   └───┘
+      */
+      qwerty {
+        bindings =
+        <
+                  &kp Q     &kp W     &kp E     &kp R     &kp T         &kp Y     &kp U     &kp I     &kp O     &kp P
+        &kp ESC   &kp A     &kp S     &kp D     &kp F     &kp G         &kp H     &kp J     &kp K     &kp L     &kp SEMI  &kp SQT
+        &kp LALT  &kp Z     &kp X     &kp C     &kp V     &kp B         &kp N     &kp M     &kp COMMA &kp DOT   &kp FSLH  &kp BSLH
+                            &kp BSPC  &kp SPACE &kp LSHFT &kp LGUI      &kp LCTRL &mo L_NUM &kp ENTER &mo L_FNS
+        >;
+      };
+
+      numbers {
+     /*
+      *     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
+      * ┌───┤ = │ 7 │ 8 │ 9 │ 0 │       │Hom│PDn│PUp│End│Sft├───┐
+      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤Ctl│
+      * ├───┤ - │ 4 │ 5 │ 6 │ [ │       │ ← │ ↓ │ ↑ │ → │ ⌘ ├───┤
+      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤Alt│
+      * └───┤ ` │ 1 │ 2 │ 3 │ ] │       │Ins│Tab│Del│ ∆ │ ∆ ├───┘
+      *     └───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
+      *           ┌───┐                           ┌───┐
+      *           │ ∆ ├───┐                   ┌───┤ ∆ │
+      *           └───┤ ∆ ├───┐           ┌───┤ ∆ ├───┘
+      *               └───┤ ∆ ├───┐   ┌───┤ ∆ ├───┘
+      *                   └───┤ ∆ │   │ ∆ ├───┘
+      *                       └───┘   └───┘
+      */
+        bindings =
+        <
+                  &kp EQUAL &kp N7    &kp N8    &kp N9    &kp N0        &kp HOME  &kp PG_DN &kp PG_UP &kp END   &kp RSHFT
+        &trans    &kp MINUS &kp N4    &kp N5    &kp N6    &kp LBKT      &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &kp RGUI  &kp RCTRL
+        &trans    &kp GRAVE &kp N1    &kp N2    &kp N3    &kp RBKT      &kp INS   &kp TAB   &kp DEL   &trans    &trans    &kp RALT
+                            &trans    &trans    &trans    &trans        &trans    &trans    &trans    &trans
+        >;
+      };
+
+      functions {
+     /*
+      *     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
+      * ┌───┤   │ F9│F10│F11│F12│       │   │ B-│ B+│   │   ├───┐
+      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤CLM│
+      * ├───┤Cap│ F5│ F6│ F7│ F8│       │   │ ◄ │ ‖ │ ► │   ├───┤
+      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤QWT│
+      * └───┤PSc│ F1│ F2│ F3│ F4│       │   │ V-│ V0│ V+│   ├───┘
+      *     └───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
+      *           ┌───┐                           ┌───┐
+      *           │ ∆ ├───┐                   ┌───┤ ∆ │
+      *           └───┤ ∆ ├───┐           ┌───┤ ∆ ├───┘
+      *               └───┤ ∆ ├───┐   ┌───┤ ∆ ├───┘
+      *                   └───┤ ∆ │   │ ∆ ├───┘
+      *                       └───┘   └───┘
+      */
+
+        bindings =
+        <
+                  &none     &kp F9    &kp F10   &kp F11   &kp F12       &none     &kp C_BRI_DN &kp C_BRI_UP &none        &none
+        &trans    &kp CAPS  &kp F5    &kp F6    &kp F7    &kp F8        &none     &kp C_PREV   &kp C_PP     &kp C_NEXT   &none     &to L_CLM
+        &trans    &kp PSCRN &kp F1    &kp F2    &kp F3    &kp F4        &none     &kp C_VOL_DN &kp C_MUTE   &kp C_VOL_UP &none     &to L_QWT
+                            &trans    &trans    &trans    &trans        &trans    &trans       &trans       &trans
+        >;
+      };
+    };
+};

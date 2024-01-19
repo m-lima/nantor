@@ -1,0 +1,12 @@
+{
+  "name": "nantor",
+  "version": "1.0.0",
+  "description": "ZMK firmware for the Pillbug nantor",
+  "main": "index.js",
+  "repository": "https://github.com/m-lima/nantor",
+  "author": "m-lima",
+  "license": "MIT",
+  "dependencies": {
+    "@devcontainers/cli": "^0.56.0"
+  }
+}

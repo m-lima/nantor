@@ -1,0 +1,11 @@
+file_format: "1"
+id: nantor
+name: Nantor
+type: shield
+url: https://github.com/m-lima/nantor
+requires: [pro_micro]
+features:
+  - keys
+siblings:
+  - nantor_left
+  - nantor_right

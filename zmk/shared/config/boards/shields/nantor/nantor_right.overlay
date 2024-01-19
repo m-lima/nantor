@@ -1,0 +1,13 @@
+#include "nantor.dtsi"
+
+&default_transform {
+  col-offset = <21>;
+};
+
+&kscan0 {
+  input-gpios =
+        <&blackpill 26 MODE>,<&blackpill 27 MODE>,<&blackpill 28 MODE>,<&blackpill 29 MODE>,<&blackpill 21 MODE>,
+        <&blackpill 38 MODE>,<&blackpill 39 MODE>,<&blackpill 40 MODE>,<&blackpill 41 MODE>,<&blackpill 45 MODE>,<&blackpill 19 MODE>,
+        <&blackpill 18 MODE>,<&blackpill 17 MODE>,<&blackpill 16 MODE>,<&blackpill 15 MODE>,<&blackpill 14 MODE>,<&blackpill 46 MODE>,
+        <&blackpill 10 MODE>,<&blackpill 11 MODE>,<&blackpill 12 MODE>,<&blackpill 13 MODE>;
+};
