@@ -1,7 +1,7 @@
 # Will compile the layout called "nantor"
-# It is expected to be called from the `qmk_firmware-cantor-nantor` directory
+# It is expected to be called from the `qmk_firmware` directory
 #
-# The keymap should be available under `qmk_firmware-cantor-nantor/keyboards/cantor/keymaps/nantor`
+# The keymap should be available under `qmk_firmware/keyboards/cantor/keymaps/nantor`
 
 if [ ! ${1} ]; then
   echo '[33mNo version provided[m'
