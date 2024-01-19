@@ -1,0 +1,63 @@
+points:
+  key:
+    padding: cy
+    spread: cx
+    bind: 2
+  zones:
+    main:
+      key.tag: main
+      rows:
+        bottom:
+        home:
+        top:
+      columns:
+        outer:
+          rows.top: $unset
+        pinky:
+          key.stagger: -cy / 2
+          rows.bottom.bind: [2, 60, 2, 2]
+        ring:
+          key.stagger: 13
+        middle:
+          key.stagger: 5
+        index:
+          key.stagger: -6
+        inner:
+          key:
+            stagger: -2
+            bind: [2, cy * 1.5 + 2, 20, 2]
+    thumb:
+      anchor:
+        ref: main_inner_bottom
+        shift: [cx * -2, -24]
+        rotate: 37.5 # splay * 2.5
+      key:
+        spread: 22
+        splay: -15
+        stagger: -2.9
+        bind: [5, 2, 2, 8]
+      columns:
+        inner:
+        midinner:
+        midoutter:
+        outer:
+      rows:
+        thumb:
+    board:
+      anchor:
+        ref: main_inner_home
+        shift: [cx 1.25, 0]
+      key:
+        width: 20.78
+        height: 52.81
+      rows:
+        single:
+      columns:
+        single:
+outlines:
+  main:
+    - what: rectangle
+      where: true
+      size: cy
+      bound: true
+      fillet: 2

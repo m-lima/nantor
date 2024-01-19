@@ -1,0 +1,93 @@
+units:
+  ta: 15
+  bs: 2
+points:
+  key:
+    padding: cy
+    spread: cx
+    bind: bs
+  zones:
+    main:
+      key.tag: main
+      rows:
+        bottom:
+        home:
+        top:
+      columns:
+        outer:
+          rows.top: $unset
+        pinky:
+          key.stagger: -cy / 2
+          rows.bottom.bind: [bs, 60, bs, bs]
+        ring:
+          key.stagger: 13
+        middle:
+          key.stagger: 5
+        index:
+          key.stagger: -6
+        inner:
+          key:
+            stagger: -2
+            #bind: [bs * 2, 2]
+            bind: [bs, cy * 1.5 + 2, 20, bs]
+    thumb:
+      anchor:
+        ref: main_inner_bottom
+        shift: [cx * -2, -20]
+        rotate: ta * 2
+      key:
+        spread: cx + 4
+        splay: -ta
+        stagger: -2.9
+        bind: [bs, bs, bs, bs]
+      columns:
+        inner:
+        midinner:
+        midoutter:
+        outer:
+          key.bind: [14, bs, bs, bs]
+      rows:
+        thumb:
+    #board:
+    #  anchor:
+    #    ref: main_inner_home
+    #    shift: [cx * 1.25, 0]
+    #  key:
+    #    width: 20.78
+    #    height: 52.81
+    #    bind: [bs * 2, bs]
+    #  rows:
+    #    single:
+    #  columns:
+    #    single:
+outlines:
+  main:
+    - what: rectangle
+      where: true
+      size: cy
+      bound: true
+      fillet: 2
+  chip:
+    - what: rectangle
+      where:
+        ref: main_inner_home
+        shift: [cx  * 1.25, 0]
+      size: [20.78, 52.81]
+  trrs:
+    - what: rectangle
+      where:
+        ref: main_inner_bottom
+        shift: [36, -14]
+      size: [12.1, 6.1]
+  board:
+    - main
+    - -chip
+    - -trrs
+  keys:
+    - what: rectangle
+      where: true
+      size: [cx - 0.5, cy - 0.5]
+      bound: false
+  composed:
+    - board
+    - -keys

@@ -1,0 +1,42 @@
+points:
+  key:
+    padding: cy
+    spread: cx
+  zones:
+    main:
+      columns:
+        outer:
+          key.stagger: 0
+        pinky:
+          key.stagger: 2
+        ring:
+          key.stagger: 13
+        middle:
+          key.stagger: 5
+        index:
+          key.stagger: -6
+        inner:
+          key.stagger: -2
+      rows:
+        bottom:
+        home:
+        top:
+    thumb:
+      key:
+        spread: 22
+        splay: -15
+        stagger: -3
+      anchor:
+        ref: main_inner_bottom
+        shift: [-23, -19]
+        rotate: 20
+      columns:
+        inner:
+        midinner:
+          key:
+            splay: -15
+            stagger: -3
+        midoutter:
+        outer:
+      rows:
+        thumb:
