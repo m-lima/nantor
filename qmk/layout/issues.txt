@@ -1,0 +1,2 @@
+v*: Cannot cmd/ctrl/alt + tab while dragging
+v[3-5]: Cmd + shift complicated
