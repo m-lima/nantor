@@ -2,6 +2,8 @@
 
 A wireless 42-key split keyboard made for Kailh Choc switches.
 
+![Nantor](.github/nantor.png)
+
 **Features**
 * Flippable design
 * [PillBug] support
