@@ -32,15 +32,28 @@ function check_submodule {
   fi
 }
 
-function init {
+function check_yarn {
+  if ! yarn devcontainer &> /dev/null; then
+    yarn
+  fi
+}
+
+function check_all {
   check_submodule \
     && check_volume \
-    && yarn run devcontainer up --workspace-folder "${root}/zmk" \
-    && yarn run devcontainer exec --workspace-folder "${root}/zmk" bash -c 'west init -l app/; west update'
+    && check_yarn
+}
+
+function init {
+  check_all \
+    && yarn devcontainer up --workspace-folder "${root}/zmk" \
+    && yarn devcontainer exec --workspace-folder "${root}/zmk" bash -c 'west init -l app/; west update'
 }
 
 function run {
-  check_submodule && check_volume
+  if ! check_all; then
+    return 1
+  fi
 
   shift
   if [ "${1}" ]; then
@@ -61,7 +74,7 @@ function build {
   fi
   check_submodule \
     && check_volume \
-    && yarn run devcontainer exec --workspace-folder "${root}/zmk" bash -c 'cd app; west build '${pristine}' -d /workspaces/zmk-config/build/left -b pillbug -- -DSHIELD=nantor_left -DZMK_CONFIG="/workspaces/zmk-config/config"; west build '${pristine}' -d /workspaces/zmk-config/build/right -b pillbug -- -DSHIELD=nantor_right -DZMK_CONFIG="/workspaces/zmk-config/config"'
+    && yarn devcontainer exec --workspace-folder "${root}/zmk" bash -c 'cd app; west build '${pristine}' -d /workspaces/zmk-config/build/left -b pillbug -- -DSHIELD=nantor_left -DZMK_CONFIG="/workspaces/zmk-config/config"; west build '${pristine}' -d /workspaces/zmk-config/build/right -b pillbug -- -DSHIELD=nantor_right -DZMK_CONFIG="/workspaces/zmk-config/config"'
 }
 
 case "${1}" in
