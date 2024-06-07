@@ -28,7 +28,7 @@ function check_volume {
 
 function check_submodule {
   if ! (git submodule status | grep heads/main &> /dev/null); then
-    git submodule update --init --recursive
+    git submodule update --init --recursive -- "${root}/zmk"
   fi
 }
 
