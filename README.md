@@ -2,15 +2,18 @@
 
 A wireless 42-key split keyboard made for Kailh Choc switches.
 
-![Nantor](.github/nantor.png)
+![Nantor Board](.github/nantor-board.png)
+
+![Nantor](.github/nantor-assembled.png)
 
 **Features**
-* Flippable design
-* [PillBug] support
-* [BlackPill] support
-* Wired and wireless support
-* Battery power support
-* Hotswap switches support
+
+- Flippable design
+- [PillBug] support
+- [BlackPill] support
+- Wired and wireless support
+- Battery power support
+- Hotswap switches support
 
 ## Hardware
 
@@ -33,6 +36,7 @@ For wireless and wired mode. This firmware assumes that [PillBug] is being used.
 > Definition available at [zmk/shared/config/boards/shields/nantor/nantor.keymap](zmk/shared/config/boards/shields/nantor/nantor.keymap)
 
 #### Base (colemak)
+
 ```
     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
 ┌───┤ Q │ W │ F │ P │ B │       │ J │ L │ U │ Y │ ; ├───┐
@@ -50,6 +54,7 @@ For wireless and wired mode. This firmware assumes that [PillBug] is being used.
 ```
 
 #### Base (qwerty)
+
 ```
     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
 ┌───┤ Q │ W │ E │ R │ T │       │ Y │ U │ I │ O │ P ├───┐
@@ -67,6 +72,7 @@ For wireless and wired mode. This firmware assumes that [PillBug] is being used.
 ```
 
 #### Numbers
+
 ```
     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
 ┌───┤ = │ 7 │ 8 │ 9 │ 0 │       │Hom│PDn│PUp│End│Sft├───┐
@@ -84,6 +90,7 @@ For wireless and wired mode. This firmware assumes that [PillBug] is being used.
 ```
 
 #### Functions
+
 ```
      ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
  ┌───┤Ins│ F9│F10│F11│F12│       │   │ B-│ B+│   │   ├───┐
@@ -101,6 +108,7 @@ For wireless and wired mode. This firmware assumes that [PillBug] is being used.
 ```
 
 #### Bluetooth
+
 ```
     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
 ┌───┤   │   │   │   │BTC│       │   │   │   │   │   ├───┐
@@ -132,6 +140,7 @@ For wireless and wired mode. This firmware assumes that [PillBug] is being used.
 ```bash
 $ ./zmk/devcontainer.sh build p
 ```
+
 > [!NOTE]
 >
 > The above command will do a pristine build. Check [zmk/devcontainer.sh](zmk/devcontainer.sh) for more options.
