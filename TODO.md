@@ -14,3 +14,8 @@
 
 - [ ] Update README with new keybindings
 - [ ] Update images
+
+## References
+
+- ZMK widget for LED control: https://github.com/caksoylar/zmk-rgbled-widget
+- Doc for pins on BlackPill: https://docs.qmk.fm/platformdev_blackpill_f4x1
