@@ -1,0 +1,16 @@
+description: Uses LEDs to communicate stateful configurations
+
+compatible: "zmk,behavior-status-led"
+
+include: zero_param.yaml
+
+properties:
+  led0:
+    type: phandle
+    required: true
+  led1:
+    type: phandle
+    required: true
+  led2:
+    type: phandle
+    required: true
