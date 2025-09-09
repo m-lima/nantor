@@ -67,50 +67,50 @@
      /*
       *     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
       * ┌───┤ = │ 7 │ 8 │ 9 │ 0 │       │Hom│PDn│PUp│End│Sft├───┐
-      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤Ctl│
+      * │Esc├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤Ctl│
       * ├───┤ - │ 4 │ 5 │ 6 │ [ │       │ ← │ ↓ │ ↑ │ → │ ⌘ ├───┤
-      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤Alt│
-      * └───┤ ` │ 1 │ 2 │ 3 │ ] │       │Del│Tab│ ∆ │ ∆ │ ∆ ├───┘
+      * │Alt├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤Alt│
+      * └───┤ ` │ 1 │ 2 │ 3 │ ] │       │Del│Tab│ , │ . │ / ├───┘
       *     └───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
       *           ┌───┐                           ┌───┐
-      *           │ ∆ ├───┐                   ┌───┤CFG│
-      *           └───┤ ∆ ├───┐           ┌───┤ ∆ ├───┘
-      *               └───┤ ∆ ├───┐   ┌───┤ ∆ ├───┘
-      *                   └───┤ ∆ │   │ ∆ ├───┘
+      *           │Bsp├───┐                   ┌───┤CFG│
+      *           └───┤Spc├───┐           ┌───┤Ent├───┘
+      *               └───┤Sft├───┐   ┌───┤ ∆ ├───┘
+      *                   └───┤ ⌘ │   │Ctl├───┘
       *                       └───┘   └───┘
       */
         bindings =
         <
                   &kp EQUAL &kp N7    &kp N8    &kp N9    &kp N0        &kp HOME  &kp PG_DN &kp PG_UP &kp END   &kp RSHFT
-        &trans    &kp MINUS &kp N4    &kp N5    &kp N6    &kp LBKT      &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &kp RGUI  &kp RCTRL
-        &trans    &kp GRAVE &kp N1    &kp N2    &kp N3    &kp RBKT      &kp DEL   &kp TAB   &trans    &trans    &trans    &kp RALT
-                            &trans    &trans    &trans    &trans        &trans    &trans    &trans    &mo L_CFG
+        &kp ESC   &kp MINUS &kp N4    &kp N5    &kp N6    &kp LBKT      &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &kp RGUI  &kp RCTRL
+        &kp LALT  &kp GRAVE &kp N1    &kp N2    &kp N3    &kp RBKT      &kp DEL   &kp TAB   &kp COMMA &kp DOT   &kp FSLH  &kp RALT
+                            &kp BSPC  &kp SPACE &kp LSHFT &kp LGUI      &kp LCTRL &trans    &kp ENTER &mo L_CFG
         >;
       };
 
       functions {
      /*
       *     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
-      * ┌───┤Ins│ F9│F10│F11│F12│       │   │ B-│ B+│   │   ├───┐
-      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤   │
-      * ├───┤Cap│ F5│ F6│ F7│ F8│       │   │ ◄ │ ‖ │ ► │   ├───┤
-      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤   │
-      * └───┤PSc│ F1│ F2│ F3│ F4│       │   │ V-│ V0│ V+│   ├───┘
+      * ┌───┤Ins│ F9│F10│F11│F12│       │   │-B │+B │   │Sft├───┐
+      * │Esc├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤Ctl│
+      * ├───┤Cap│ F5│ F6│ F7│ F8│       │   │ ◄ │ ‖ │ ► │ ⌘ ├───┤
+      * │Alt├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤Alt│
+      * └───┤PSc│ F1│ F2│ F3│ F4│       │   │-V │ V0│+V │   ├───┘
       *     └───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
       *           ┌───┐                           ┌───┐
-      *           │ ∆ ├───┐                   ┌───┤ ∆ │
-      *           └───┤ ∆ ├───┐           ┌───┤ ∆ ├───┘
-      *               └───┤ ∆ ├───┐   ┌───┤CFG├───┘
-      *                   └───┤ ∆ │   │ ∆ ├───┘
+      *           │Bsp├───┐                   ┌───┤ ∆ │
+      *           └───┤Spc├───┐           ┌───┤Ent├───┘
+      *               └───┤Sft├───┐   ┌───┤CFG├───┘
+      *                   └───┤ ⌘ │   │Ctl├───┘
       *                       └───┘   └───┘
       */
 
         bindings =
         <
-                  &kp INS   &kp F9    &kp F10   &kp F11   &kp F12       &none  &kp C_BRI_DN &kp C_BRI_UP &none        &none
-        &trans    &kp CAPS  &kp F5    &kp F6    &kp F7    &kp F8        &none  &kp C_PREV   &kp C_PP     &kp C_NEXT   &none &none
-        &trans    &kp PSCRN &kp F1    &kp F2    &kp F3    &kp F4        &none  &kp C_VOL_DN &kp C_MUTE   &kp C_VOL_UP &none &none
-                            &trans    &trans    &trans    &trans        &trans &mo L_CFG    &trans       &trans
+                  &kp INS   &kp F9    &kp F10   &kp F11   &kp F12       &none     &kp C_BRI_DN &kp C_BRI_UP &none        &kp RSHFT
+        &kp ESC   &kp CAPS  &kp F5    &kp F6    &kp F7    &kp F8        &none     &kp C_PREV   &kp C_PP     &kp C_NEXT   &kp RGUI  &kp RCTRL
+        &kp LALT  &kp PSCRN &kp F1    &kp F2    &kp F3    &kp F4        &none     &kp C_VOL_DN &kp C_MUTE   &kp C_VOL_UP &none     &kp RALT
+                            &kp BSPC  &kp SPACE &kp LSHFT &kp LGUI      &kp LCTRL &mo L_CFG    &kp ENTER    &trans
         >;
       };
 
@@ -118,25 +118,25 @@
      /*
       *     ┌───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
       * ┌───┤   │   │   │   │BTC│       │   │   │   │   │   ├───┐
-      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤CLM│
+      * │   ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤CLM│
       * ├───┤BLE│BT3│BT4│   │   │       │   │   │   │   │   ├───┤
-      * │ ∆ ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤QWT│
+      * │   ├───┼───┼───┼───┼───┤       ├───┼───┼───┼───┼───┤QWT│
       * └───┤USB│BT0│BT1│BT2│   │       │   │   │   │   │   ├───┘
       *     └───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
       *           ┌───┐                           ┌───┐
-      *           │ ∆ ├───┐                   ┌───┤ ∆ │
-      *           └───┤ ∆ ├───┐           ┌───┤ ∆ ├───┘
-      *               └───┤ ∆ ├───┐   ┌───┤ ∆ ├───┘
-      *                   └───┤ ∆ │   │ ∆ ├───┘
+      *           │   ├───┐                   ┌───┤ ∆ │
+      *           └───┤   ├───┐           ┌───┤   ├───┘
+      *               └───┤   ├───┐   ┌───┤ ∆ ├───┘
+      *                   └───┤   │   │   ├───┘
       *                       └───┘   └───┘
       */
 
         bindings =
         <
-                  &none        &none        &none        &none        &bt BT_CLR    &none  &none  &none  &none  &none
-        &trans    &out OUT_BLE &bt BT_SEL 3 &bt BT_SEL 4 &none        &none         &none  &none  &none  &none  &none &to L_CLM
-        &trans    &out OUT_USB &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &none         &none  &none  &none  &none  &none &to L_QWT
-                               &trans       &trans       &trans       &trans        &trans &trans &trans &trans
+              &none        &none        &none        &none        &bt BT_CLR    &none  &none  &none  &none  &none
+        &none &out OUT_BLE &bt BT_SEL 3 &bt BT_SEL 4 &none        &none         &none  &none  &none  &none  &none &to L_CLM
+        &none &out OUT_USB &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &none         &none  &none  &none  &none  &none &to L_QWT
+                           &none        &none        &none        &none         &none  &trans &none  &trans
         >;
       };
     };
