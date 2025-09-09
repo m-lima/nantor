@@ -1,0 +1,12 @@
+/ {
+  behaviors {
+    /omit-if-no-ref/ stat_bat: stat_bat {
+      compatible = "zmk,behavior-status-led";
+      status = "battery";
+    };
+    /omit-if-no-ref/ stat_bt: stat_bt {
+      compatible = "zmk,behavior-status-led";
+      status = "bluetooth";
+    };
+  };
+};

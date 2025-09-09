@@ -5,12 +5,9 @@ compatible: "zmk,behavior-status-led"
 include: zero_param.yaml
 
 properties:
-  led0:
-    type: phandle
+  status:
+    type: string
     required: true
-  led1:
-    type: phandle
-    required: true
-  led2:
-    type: phandle
-    required: true
+    enum:
+      - "battery"
+      - "bluetooth"
