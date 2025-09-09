@@ -27,4 +27,13 @@
         <&blackpill 46 MODE>,<&blackpill 14 MODE>,<&blackpill 15 MODE>,<&blackpill 16 MODE>,<&blackpill 17 MODE>,<&blackpill 18 MODE>,
                                                   <&blackpill 13 MODE>,<&blackpill 12 MODE>,<&blackpill 11 MODE>,<&blackpill 10 MODE>;
   };
+
+  behaviors {
+    st_led: st_led {
+      compatible = "zmk,behavior-status-led";
+      led0 = <&blackpill 4  GPIO_OUTPUT_LOW>
+      led1 = <&blackpill 20 GPIO_OUTPUT_LOW>
+      led2 = <&blackpill 25 GPIO_OUTPUT_LOW>
+    };
+  };
 };

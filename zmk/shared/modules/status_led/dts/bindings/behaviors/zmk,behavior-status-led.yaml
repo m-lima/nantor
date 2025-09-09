@@ -2,12 +2,15 @@ description: Uses LEDs to communicate stateful configurations
 
 compatible: "zmk,behavior-status-led"
 
-include: zero_param.yaml
+include: one_param.yaml
 
 properties:
-  status:
-    type: string
+  led0:
+    type: phandle
     required: true
-    enum:
-      - "battery"
-      - "bluetooth"
+  led1:
+    type: phandle
+    required: true
+  led2:
+    type: phandle
+    required: true

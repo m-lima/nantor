@@ -13,6 +13,7 @@
 # Repo
 
 - [ ] Update README with new keybindings
+- [ ] Update README and keymap with valid symbols
 - [ ] Update images
 
 ## References

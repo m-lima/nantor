@@ -78,7 +78,7 @@ function make {
   fi
 
   function make_cmd {
-    echo 'west build '${pristine}' -d /workspaces/zmk-config/build/'${1}' -b pillbug -- -DSHIELD=nantor_'${1}' -DZMK_CONFIG=/workspaces/zmk-config/config'
+    echo 'west build '${pristine}' -d /workspaces/zmk-config/build/'${1}' -b pillbug -- -DSHIELD=nantor_'${1}' -DZMK_CONFIG=/workspaces/zmk-config/config -DZMK_EXTRA_MODULES=/workspaces/zmk-config/modules/status_led'
   }
 
   yarn devcontainer exec --workspace-folder "${root}/zmk" bash -c "cd app; $(make_cmd left) && $(make_cmd right)"
