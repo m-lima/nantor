@@ -27,6 +27,11 @@
               pkgs.inkscape
             ];
           };
+          zmk = pkgs.mkShell {
+            buildInputs = [
+              pkgs.yarn
+            ];
+          };
         };
       }
     );

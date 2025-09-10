@@ -7,4 +7,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Build
-shared/build
+shared/build/
+
+# Direnv
+.direnv/
