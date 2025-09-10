@@ -1,0 +1,12 @@
+menu "Status LED Options"
+
+config ZMK_BEHAVIOR_STATUS_LED_WATCHDOG
+  bool "Should blink any moment the connection has dropped"
+
+endmenu
+
+DT_COMPAT_ZMK_BEHAVIOR_STATUS_LED := zmk,behavior-status-led
+
+config ZMK_BEHAVIOR_STATUS_LED
+  bool
+  default $(dt_compat_enabled,$(DT_COMPAT_ZMK_BEHAVIOR_STATUS_LED))

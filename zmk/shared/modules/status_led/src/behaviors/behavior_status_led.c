@@ -4,4 +4,4 @@
 
 #include <zmk/behavior.h>
 
-struct behavior_status_led_config {}
+struct behavior_status_led_config {};

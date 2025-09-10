@@ -6,11 +6,11 @@ include: one_param.yaml
 
 properties:
   led0:
-    type: phandle
+    type: phandle-array
     required: true
   led1:
-    type: phandle
+    type: phandle-array
     required: true
   led2:
-    type: phandle
+    type: phandle-array
     required: true

@@ -29,11 +29,16 @@
   };
 
   behaviors {
-    st_led: st_led {
+    // omit-if-no-ref -> Drop this if there is no use of the &st_led phandle
+    // first st_led -> Label name. How it should be referenced
+    // Second st_led -> Node name in the device tree
+    // The name should be less that 8 characters so it can be invoked in peripherals
+    /omit-if-no-ref/ st_led: st_led {
       compatible = "zmk,behavior-status-led";
-      led0 = <&blackpill 4  GPIO_OUTPUT_LOW>
-      led1 = <&blackpill 20 GPIO_OUTPUT_LOW>
-      led2 = <&blackpill 25 GPIO_OUTPUT_LOW>
+      #binding-cells = <1>;
+      led0 = <&blackpill 4  GPIO_OUTPUT_LOW>;
+      led1 = <&blackpill 20 GPIO_OUTPUT_LOW>;
+      led2 = <&blackpill 25 GPIO_OUTPUT_LOW>;
     };
   };
 };
