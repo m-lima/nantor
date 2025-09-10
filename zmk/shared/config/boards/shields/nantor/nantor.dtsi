@@ -33,7 +33,7 @@
     // first st_led -> Label name. How it should be referenced
     // Second st_led -> Node name in the device tree
     // The name should be less that 8 characters so it can be invoked in peripherals
-    /omit-if-no-ref/ st_led: st_led {
+    /omit-if-no-ref/ stled: stled {
       compatible = "zmk,behavior-status-led";
       #binding-cells = <1>;
       led0 = <&blackpill 4  GPIO_OUTPUT_LOW>;

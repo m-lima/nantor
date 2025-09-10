@@ -2,7 +2,7 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/outputs.h>
-#include <zmk_behavior_status_led/modes.h>
+#include <dt-bindings/zmk/stled.h>
 
 #define L_CLM 0
 #define L_QWT 1
@@ -113,16 +113,16 @@
       * └───┤USB│BT0│BT1│BT2│   │      │   │   │   │   │   ├───┘
       *     └───┴───┴───┴───┴───┘      └───┴───┴───┴───┴───┘
       *           ┌───┬───┬───┬───┐  ┌───┬───┬───┬───┐
-      *           │   │   │   │   │  │ 󱐋 │ ∆ │ 󰂯 │ ∆ │
+      *           │   │   │   │   │  │BAT│ ∆ │BLT│ ∆ │
       *           └───┴───┴───┴───┘  └───┴───┴───┴───┘
       */
 
         bindings =
         <
-              &none        &none        &none        &none        &bt BT_CLR    &none          &none  &none           &none  &none
-        &none &out OUT_BLE &bt BT_SEL 3 &bt BT_SEL 4 &none        &none         &none          &none  &none           &none  &none &to L_CLM
-        &none &out OUT_USB &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &none         &none          &none  &none           &none  &none &to L_QWT
-                           &none        &none        &none        &none         &st_led ST_BAT &trans &st_led ST_CON  &trans
+              &none        &none        &none        &none        &bt BT_CLR    &none         &none  &none          &none  &none
+        &none &out OUT_BLE &bt BT_SEL 3 &bt BT_SEL 4 &none        &none         &none         &none  &none          &none  &none &to L_CLM
+        &none &out OUT_USB &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &none         &none         &none  &none          &none  &none &to L_QWT
+                           &none        &none        &none        &none         &stled ST_BAT &trans &stled ST_CON  &trans
         >;
       };
     };
