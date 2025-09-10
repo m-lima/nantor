@@ -7,7 +7,10 @@ cd "${root}"
 
 function clean {
   docker ps -a | grep vsc-zmk- | awk '{system("docker stop " $1); system("docker rm " $1)}'
+  docker images | grep vsc-zmk- | awk '{system("docker rmi " $1)}'
   docker volume ls | grep zmk- | awk '{system("docker volume rm " $2)}'
+  rm -rf "${root}/zmk"
+  git checkout -- "${root}/zmk"
 }
 
 function check_volume {
@@ -55,26 +58,30 @@ function run {
     return 1
   fi
 
-  shift
   if [ "${1}" ]; then
     command="${1}"
-  else
-    command='help'
   fi
   shift
 
   yarn run devcontainer "${command}" --workspace-folder "${root}/zmk" "${@}"
 }
 
-function build {
+function make {
+  if ! check_all; then
+    return 1
+  fi
+
   if [[ "${1}" == "p" ]]; then
     pristine='-p'
   else
     pristine=''
   fi
-  check_submodule \
-    && check_volume \
-    && yarn devcontainer exec --workspace-folder "${root}/zmk" bash -c 'cd app; west build '${pristine}' -d /workspaces/zmk-config/build/left -b pillbug -- -DSHIELD=nantor_left -DZMK_CONFIG="/workspaces/zmk-config/config"; west build '${pristine}' -d /workspaces/zmk-config/build/right -b pillbug -- -DSHIELD=nantor_right -DZMK_CONFIG="/workspaces/zmk-config/config"'
+
+  function make_cmd {
+    echo 'west build '${pristine}' -d /workspaces/zmk-config/build/'${1}' -b pillbug -- -DSHIELD=nantor_'${1}' -DZMK_CONFIG=/workspaces/zmk-config/config'
+  }
+
+  yarn devcontainer exec --workspace-folder "${root}/zmk" bash -c "cd app; $(make_cmd left) && $(make_cmd right)"
 }
 
 case "${1}" in
@@ -84,11 +91,11 @@ case "${1}" in
     ;;
   "clean") clean ;;
   "init") init ;;
-  "build") build "${2}" ;;
+  "make") make "${2}" ;;
   "all")
     clean \
       && init \
-      && build p
+      && make p
     ;;
   *) run "${@}" ;;
 esac
