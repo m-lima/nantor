@@ -86,9 +86,9 @@ case "${1}" in
   "init") init ;;
   "build") build "${2}" ;;
   "all")
-    clean
-    init
-    build p
+    clean \
+      && init \
+      && build p
     ;;
   *) run "${@}" ;;
 esac
