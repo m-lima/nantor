@@ -5,12 +5,6 @@ compatible: "zmk,behavior-status-led"
 include: one_param.yaml
 
 properties:
-  led0:
-    type: phandle-array
-    required: true
-  led1:
-    type: phandle-array
-    required: true
-  led2:
+  led-gpios:
     type: phandle-array
     required: true
