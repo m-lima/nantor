@@ -1,7 +1,6 @@
 # References
 
 ## Documentation for pins on the Blackpill
-
 [https://docs.qmk.fm/platformdev_blackpill_f4x1](https://docs.qmk.fm/platformdev_blackpill_f4x1)
 
 ## Reference for adding ZMK code
@@ -22,3 +21,8 @@
 ### Device tree source syntax
 [https://docs.zephyrproject.org/3.5.0/build/dts/bindings-syntax.html](https://docs.zephyrproject.org/3.5.0/build/dts/bindings-syntax.html)
 
+### ZMK
+[https://github.com/zmkfirmware/zmk](https://github.com/zmkfirmware/zmk)
+
+### Zephyr
+[https://github.com/zephyrproject-rtos/zephyr](https://github.com/zephyrproject-rtos/zephyr)
