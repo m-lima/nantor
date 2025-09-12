@@ -7,15 +7,16 @@ cd "${root}"
 
 function clean {
   docker ps -a | grep vsc-zmk- | awk '{system("docker stop " $1); system("docker rm " $1)}'
-  docker images | grep vsc-zmk- | awk '{system("docker rmi " $1)}'
+  docker images | grep vsc-zmk- | awk '{system("docker rmi " $3)}'
+  docker images | grep zmkfirmware | awk '{system("docker rmi " $3)}'
   docker volume ls | grep zmk- | awk '{system("docker volume rm " $2)}'
   rm -rf "${root}/zmk"
   git checkout -- "${root}/zmk"
 }
 
 function check_volume {
-  if docker volume inspect zmk-config &> /dev/null; then
-    if [[ $(docker volume inspect zmk-config | jq -r '.[].Options') == "null" ]]; then
+  if zmk_config=$(docker volume inspect zmk-config 2> /dev/null); then
+    if [[ $(jq -r '.[].Options' <<<${zmk_config}) == "null" ]] || [[ $(jq -r '.[].Options.device' <<<${zmk_config}) != "${root}/shared" ]]; then
       echo "[32mVolume zmk-config is already created without referencing[m ${root}/shared"
       echo -n 'Continue? [y/N]'
       read input
@@ -72,7 +73,7 @@ function make {
   fi
 
   if [[ "${1}" == "p" ]]; then
-    pristine='-p'
+    pristine='--pristine'
   else
     pristine=''
   fi
