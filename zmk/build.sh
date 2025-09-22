@@ -3,19 +3,30 @@
 root=$(dirname "${0}")
 root=$(realpath "${root}")
 
-cd "${root}"
-
 function log {
   echo -n '[34m['"${1}"'][m ' >&2
   shift
   echo "${@}" >&2
 }
 
+if command -v podman &> /dev/null; then
+  pod=podman
+elif command -v docker &> /dev/null; then
+  pod=docker
+fi
+
+if [ -z "${pod}" ]; then
+  log init "No container system"
+  exit 1
+fi
+
+cd "${root}"
+
 function clean {
   log clean "Stopping container"
-  docker stop zmk
+  "${pod}" stop zmk
   log clean "Deleting images"
-  docker images | grep zmkfirmware | awk '{system("docker rmi " $3)}'
+  "${pod}" images | grep zmkfirmware | awk '{system("'"${pod}"' rmi " $3)}'
   log clean "Resetting ZMK directory"
   rm -rf "${root}/zmk"
   git checkout -- "${root}/zmk"
@@ -24,7 +35,7 @@ function clean {
 function prepare_image {
   log prepare_image "Building zmk:latest"
   cd "${root}/zmk/.devcontainer"
-  docker build -t zmk:latest .
+  "${pod}" build -t zmk:latest .
 }
 
 function check_submodule {
@@ -36,8 +47,8 @@ function check_submodule {
 }
 
 function check_image {
-  log check_image "Checking docker image existance"
-  if ! docker images --format '{{ .Repository }}:{{ .Tag }}' | grep 'zmk:latest' &>/dev/null; then
+  log check_image "Checking container image existance"
+  if ! "${pod}" images --format '{{ .Repository }}:{{ .Tag }}' | grep 'zmk:latest' &>/dev/null; then
     prepare_image
   fi
 }
@@ -56,7 +67,7 @@ function run {
   fi
 
   log run "Running: [37m${@}[m"
-  docker \
+  "${pod}" \
     run \
     -it \
     --rm \
