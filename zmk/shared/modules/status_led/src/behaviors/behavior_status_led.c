@@ -50,21 +50,35 @@ int behavior_status_led_ble_listener(const zmk_event_t *eh) {
   return ZMK_EV_EVENT_BUBBLE;
 }
 
+#if IS_ENABLED(CONFIG_ZMK_BLE)
 ZMK_LISTENER(status_led_ble, behavior_status_led_ble_listener);
+#if !IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
 ZMK_SUBSCRIPTION(status_led_ble, zmk_ble_active_profile_changed);
+#elif IS_ENABLED(CONFIG_ZMK_SPLIT_BLE)
 ZMK_SUBSCRIPTION(status_led_ble, zmk_split_peripheral_status_changed);
+#endif
+#endif // IS_ENABLED(CONFIG_ZMK_BLE)
 
-// static int behavior_status_led_init(const struct device *dev) {
-//   const struct behavior_status_led_config *config = dev->config;
-//   int err = 0;
-//
-//   if (config->num_leds != 3) {
-//     err = -EINVAL;
-//   }
-//
-//   return err;
-// }
-//
+static int behavior_status_led_init(const struct device *dev) {
+  for (int i = 0; i < 3; ++i) {
+    if (!device_is_ready(led_gpios[i].port)) {
+      return -ENODEV;
+    }
+
+    int ret = gpio_pin_configure_dt(&led_gpios[i], GPIO_OUTPUT_ACTIVE);
+    if (ret < 0) {
+      return ret;
+    }
+
+    // Turn on
+    gpio_pin_set_dt(&led_gpios[0], 1);
+    gpio_pin_set_dt(&led_gpios[1], 1);
+    gpio_pin_set_dt(&led_gpios[2], 1);
+  }
+
+  return 0;
+}
+
 // static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
 //                                      struct zmk_behavior_binding_event
 //                                      event) {
