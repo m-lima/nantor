@@ -5,7 +5,7 @@
       "Application": "Pcbnew",
       "Version": "7.0.1-0"
     },
-    "CreationDate": "2025-04-04T15:19:30+02:00"
+    "CreationDate": "2025-09-26T20:14:45+02:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
@@ -34,47 +34,47 @@
   ],
   "FilesAttributes": [
     {
-      "Path": "nantor-F_Cu.gbr",
+      "Path": "nantor-F_Cu.gtl",
       "FileFunction": "Copper,L1,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "nantor-B_Cu.gbr",
+      "Path": "nantor-B_Cu.gbl",
       "FileFunction": "Copper,L2,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "nantor-F_Paste.gbr",
+      "Path": "nantor-F_Paste.gtp",
       "FileFunction": "SolderPaste,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "nantor-B_Paste.gbr",
+      "Path": "nantor-B_Paste.gbp",
       "FileFunction": "SolderPaste,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "nantor-F_Silkscreen.gbr",
+      "Path": "nantor-F_Silkscreen.gto",
       "FileFunction": "Legend,Top",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "nantor-B_Silkscreen.gbr",
+      "Path": "nantor-B_Silkscreen.gbo",
       "FileFunction": "Legend,Bot",
       "FilePolarity": "Positive"
     },
     {
-      "Path": "nantor-F_Mask.gbr",
+      "Path": "nantor-F_Mask.gts",
       "FileFunction": "SolderMask,Top",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "nantor-B_Mask.gbr",
+      "Path": "nantor-B_Mask.gbs",
       "FileFunction": "SolderMask,Bot",
       "FilePolarity": "Negative"
     },
     {
-      "Path": "nantor-Edge_Cuts.gbr",
+      "Path": "nantor-Edge_Cuts.gm1",
       "FileFunction": "Profile",
       "FilePolarity": "Positive"
     }
