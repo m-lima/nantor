@@ -124,6 +124,14 @@ case "${1}" in
     shift
     run ${@}
     ;;
+  "help")
+    cat <<EOF
+clean      Cleans the build artifacts, the zmk submodule, images, and volumes
+init       Build the image and initializes zmk
+make [p]   Builds both sides. Pass 'p' for a pristine build
+full       Do all of clean > init > make p
+EOF
+    ;;
   *)
     shift
     echo "Unkonwn command ${@}" >&2
