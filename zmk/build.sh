@@ -11,8 +11,14 @@ function log {
 
 if command -v podman &> /dev/null; then
   pod=podman
+  if command -v podman-build-nix &> /dev/null; then
+    podBuild=podman-build-nix
+  else
+    podBuild="podman build"
+  fi
 elif command -v docker &> /dev/null; then
   pod=docker
+  podBuild="docker build"
 fi
 
 if [ -z "${pod}" ]; then
@@ -35,7 +41,7 @@ function clean {
 function prepare_image {
   log prepare_image "Building zmk:latest"
   cd "${root}/zmk/.devcontainer"
-  "${pod}" build -t zmk:latest .
+  "${podBuild}" -t zmk:latest .
 }
 
 function check_submodule {
