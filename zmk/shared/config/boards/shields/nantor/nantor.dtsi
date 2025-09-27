@@ -37,8 +37,8 @@
       compatible = "zmk,behavior-status-led";
       #binding-cells = <1>;
       led-gpios =
-        <&blackpill 4  GPIO_PUSH_PULL>,
-        <&blackpill 20 GPIO_PUSH_PULL>,
+        <&blackpill 31 GPIO_PUSH_PULL>,
+        <&blackpill 30 GPIO_PUSH_PULL>,
         <&blackpill 25 GPIO_PUSH_PULL>;
     };
   };
