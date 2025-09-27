@@ -100,15 +100,23 @@ function make {
     return 1
   fi
 
-  if [[ "${1}" == "p" ]]; then
-    log make "Got pristine flag"
-    pristine='--pristine'
-  else
-    pristine=''
-  fi
+  case "${1}" in
+    "lp"|"pl")
+      log make "Got pristine and logging flags"
+      flag='--pristine -S zmk-usb-logging'
+      ;;
+    "p")
+      log make "Got pristine flag"
+      flag='--pristine'
+      ;;
+    "l")
+      log make "Got logging flag"
+      flag='-S zmk-usb-logging'
+      ;;
+  esac
 
   function make_cmd {
-    echo 'build -s app '${pristine}' -d /shared/build/'${1}' -b pillbug -- -DSHIELD=nantor_'${1}' -DZMK_CONFIG=/shared/config -DZMK_EXTRA_MODULES=/shared/modules/status_led'
+    echo 'build -s app '${flag}' -d /shared/build/'${1}' -b pillbug -- -DSHIELD=nantor_'${1}' -DZMK_CONFIG=/shared/config -DZMK_EXTRA_MODULES=/shared/modules/status_led'
   }
 
   log make "Building firmware"
@@ -126,10 +134,10 @@ case "${1}" in
     ;;
   "help")
     cat <<EOF
-clean      Cleans the build artifacts, the zmk submodule, images, and volumes
-init       Build the image and initializes zmk
-make [p]   Builds both sides. Pass 'p' for a pristine build
-full       Do all of clean > init > make p
+clean        Cleans the build artifacts, the zmk submodule, images, and volumes
+init         Build the image and initializes zmk
+make [p|l]   Builds both sides. Pass 'p' for a pristine build and 'l' for logging
+full         Do all of clean > init > make p
 EOF
     ;;
   *)
