@@ -189,6 +189,10 @@ extern void behavior_status_led_thread_main(void *, void *, void *) {
   k_timeout_t timeout = K_FOREVER;
   uint8_t step = 0;
 
+  gpio_pin_set_dt(&led_gpios[0], 0);
+  gpio_pin_set_dt(&led_gpios[1], 0);
+  gpio_pin_set_dt(&led_gpios[2], 0);
+
   while (true) {
     k_msgq_get(&behavior_status_led_msgq, &command, timeout);
 
@@ -239,7 +243,7 @@ static int behavior_status_led_init(const struct device *dev) {
       &behavior_status_led_thread, behavior_status_led_thread_stack,
       K_THREAD_STACK_SIZEOF(behavior_status_led_thread_stack),
       behavior_status_led_thread_main, NULL, NULL, NULL,
-      K_LOWEST_APPLICATION_THREAD_PRIO, 0, K_NO_WAIT);
+      K_LOWEST_APPLICATION_THREAD_PRIO, 0, K_MSEC(500));
 
   return 0;
 }
