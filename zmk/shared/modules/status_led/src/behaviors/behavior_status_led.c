@@ -19,8 +19,7 @@
 
 #if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
 
-// LOG_MODULE_REGISTER(status_led, CONFIG_ZMK_LOG_LEVEL);
-LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
+LOG_MODULE_REGISTER(status_led, CONFIG_ZMK_LOG_LEVEL);
 
 /*
  * GPIO initialization
@@ -87,13 +86,13 @@ static void clear() {
       .led2 = OFF,
   };
 
-  LOG_INF("Clearing command");
+  LOG_DBG("Clearing command");
 
   k_msgq_put(&behavior_status_led_msgq, &command, K_NO_WAIT);
 }
 
 static void display_bluetooth() {
-  LOG_DBG("[display_bluetooth] Enter");
+  LOG_DBG("Enter");
   struct behavior_status_led_command command = {
       .led0 = OFF,
       .led1 = OFF,
@@ -104,20 +103,20 @@ static void display_bluetooth() {
 #if !IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
   switch (zmk_endpoints_selected().transport) {
   case ZMK_TRANSPORT_USB:
-    LOG_INF("[display_bluetooth] USB connected");
+    LOG_INF("USB connected");
     make_full_command(&command, FULL);
     break;
   case ZMK_TRANSPORT_BLE:
 #if IS_ENABLED(CONFIG_ZMK_BLE)
     uint8_t channel = zmk_ble_active_profile_index() + 1;
     if (zmk_ble_active_profile_is_connected()) {
-      LOG_INF("[display_bluetooth] BLE %d connected", channel);
+      LOG_INF("BLE %d connected", channel);
       make_channel_command(&command, FULL, channel);
     } else if (zmk_ble_active_profile_is_open()) {
-      LOG_INF("[display_bluetooth] BLE %d advertising", channel);
+      LOG_INF("BLE %d advertising", channel);
       make_channel_command(&command, HIGH, channel);
     } else {
-      LOG_INF("[display_bluetooth] BLE %d disconnected", channel);
+      LOG_INF("BLE %d disconnected", channel);
       make_channel_command(&command, LOW, channel);
     }
 #endif // IS_ENABLED(CONFIG_ZMK_BLE)
@@ -125,20 +124,20 @@ static void display_bluetooth() {
   }
 #elif IS_ENABLED(CONFIG_ZMK_SPLIT_BLE)
   if (zmk_split_bt_peripheral_is_connected()) {
-    LOG_INF("[display_bluetooth] Split BLE connected");
+    LOG_INF("Split BLE connected");
     make_full_command(&command, FULL);
   } else {
-    LOG_INF("[display_bluetooth] Split BLE disconnected");
+    LOG_INF("Split BLE disconnected");
     make_full_command(&command, LOW);
   }
 #endif // SPLIT
-  LOG_DBG("[display_bluetooth] Sending command [%d %d %d]", command.led0,
-          command.led1, command.led2);
+  LOG_DBG("Sending command [%d %d %d]", command.led0, command.led1,
+          command.led2);
   k_msgq_put(&behavior_status_led_msgq, &command, K_NO_WAIT);
 }
 
 static void display_battery() {
-  LOG_DBG("[display_battery] Enter");
+  LOG_DBG("Enter");
   struct behavior_status_led_command command = {
       .led0 = OFF,
       .led1 = OFF,
@@ -147,12 +146,17 @@ static void display_battery() {
 
   uint8_t charge = zmk_battery_state_of_charge();
   for (uint8_t i = 0; charge == 0 && i < 10; ++i) {
-    LOG_DBG("[display_battery] Retrying battery charge: %d", i);
+    k_sleep(K_MSEC(100));
+    LOG_DBG("Retrying battery charge: %d", i);
     charge = zmk_battery_state_of_charge();
   }
-  LOG_INF("[display_battery] Got charge %d", charge);
+  LOG_INF("Got charge %d", charge);
 
-  if (charge < 10) {
+  if (charge == 0) {
+    command.led2 = LOW;
+    command.led1 = LOW;
+    command.led0 = LOW;
+  } else if (charge < 10) {
     command.led0 = LOW;
   } else if (charge < 20) {
     command.led0 = HIGH;
@@ -179,14 +183,14 @@ static void display_battery() {
     command.led2 = FULL;
     command.led1 = FULL;
     command.led0 = FULL;
-  } else if (charge < 100) {
-    command.led2 = LOW;
-    command.led1 = LOW;
-    command.led0 = LOW;
+  } else {
+    command.led2 = HIGH;
+    command.led1 = HIGH;
+    command.led0 = HIGH;
   }
 
-  LOG_DBG("[display_battery] Sending command [%d %d %d]", command.led0,
-          command.led1, command.led2);
+  LOG_DBG("Sending command [%d %d %d]", command.led0, command.led1,
+          command.led2);
   k_msgq_put(&behavior_status_led_msgq, &command, K_NO_WAIT);
 }
 
@@ -194,7 +198,7 @@ static void display_battery() {
  * Background thread
  */
 extern void behavior_status_led_thread_main(void *, void *, void *) {
-  LOG_INF("[status_led_thread]: Enter");
+  LOG_INF("Starting thread");
   struct behavior_status_led_command command;
   k_timeout_t timeout = K_FOREVER;
   uint8_t step = 0;
@@ -205,8 +209,7 @@ extern void behavior_status_led_thread_main(void *, void *, void *) {
 
   while (true) {
     int status = k_msgq_get(&behavior_status_led_msgq, &command, timeout);
-    LOG_DBG("[status_led_thread] Polled for messages. status: %d, command: [%d "
-            "%d %d], step: %d",
+    LOG_DBG("Polled for messages. status: %d, command: [%d %d %d], step: %d",
             status, command.led0, command.led1, command.led2, step);
 
     if (command.led0 == HIGH || command.led1 == HIGH || command.led2 == HIGH) {
@@ -233,7 +236,7 @@ extern void behavior_status_led_thread_main(void *, void *, void *) {
   }
 }
 
-K_THREAD_STACK_DEFINE(behavior_status_led_thread_stack, 128);
+K_THREAD_STACK_DEFINE(behavior_status_led_thread_stack, 512);
 struct k_thread behavior_status_led_thread;
 k_tid_t behavior_status_led_thread_id;
 
@@ -241,7 +244,7 @@ k_tid_t behavior_status_led_thread_id;
  * Behavior API initialization
  */
 static int behavior_status_led_init(const struct device *dev) {
-  LOG_INF("[status_led_behavior] Enter");
+  LOG_INF("Initializing behavior");
 
   for (int i = 0; i < 3; ++i) {
     if (!device_is_ready(led_gpios[i].port)) {
@@ -265,19 +268,21 @@ static int behavior_status_led_init(const struct device *dev) {
 
 static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
                                      struct zmk_behavior_binding_event event) {
-  LOG_DBG("[status_led_behavior] Press");
+  LOG_DBG("Press with %d", binding->param1);
   switch (binding->param1) {
   case ST_BAT:
     display_battery();
+    break;
   case ST_BLE:
     display_bluetooth();
+    break;
   }
   return ZMK_BEHAVIOR_OPAQUE;
 }
 
 static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
                                       struct zmk_behavior_binding_event event) {
-  LOG_DBG("[status_led_behavior] Release");
+  LOG_DBG("Release");
   clear();
   return ZMK_BEHAVIOR_OPAQUE;
 }
