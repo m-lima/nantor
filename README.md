@@ -133,12 +133,12 @@ For wireless and wired mode. This firmware assumes that [PillBug] is being used.
 #### Build the images
 
 ```bash
-$ ./zmk/devcontainer.sh build p
+$ ./zmk/build.sh make p
 ```
 
 > [!NOTE]
 >
-> The above command will do a pristine build. Check [zmk/devcontainer.sh](zmk/devcontainer.sh) for more options.
+> The above command will do a pristine build. Check [zmk/build.sh](zmk/build.sh) for more options.
 
 The output files will be located at `zmk/shared/build/(left|right)/zephyr/zmk.uf2`.
 
