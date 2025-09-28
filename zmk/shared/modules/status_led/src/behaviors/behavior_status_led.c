@@ -54,6 +54,10 @@ struct behavior_status_led_command {
   mode led2 : 2;
 };
 
+/*
+ * LED command queue
+ */
+
 inline static void
 make_channel_command(struct behavior_status_led_command *command, mode mode,
                      uint8_t channel) {
@@ -76,22 +80,146 @@ make_full_command(struct behavior_status_led_command *command, mode mode) {
 K_MSGQ_DEFINE(behavior_status_led_msgq,
               sizeof(struct behavior_status_led_command), 4, 1);
 
-/*
- * Available commands
- */
-static void clear() {
+BUILD_ASSERT(CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 0 &&
+                 CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER < 8,
+             "Rollover count must be between 1 and 7 inclusive");
+#if CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
+#define INVALID_COMMAND_IDX 128
+struct behavior_status_led_command_queue_entry {
+  struct zmk_behavior_binding_event event;
+  struct behavior_status_led_command command;
+};
+static struct behavior_status_led_command_queue_entry
+    command_queue[CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER];
+static uint8_t rollover_count = 0;
+inline static void send_command(struct zmk_behavior_binding_event *event,
+                                struct behavior_status_led_command *command) {
+  if (rollover_count == CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER) {
+    uint8_t min_ts_idx = 0;
+    int64_t min_ts = INT64_MAX;
+
+    for (uint8_t i = 0; i < rollover_count; ++i) {
+      if (command_queue[i].event.timestamp < min_ts) {
+        min_ts_idx = i;
+        min_ts = command_queue[i].event.timestamp;
+      }
+    }
+
+    // If the min was not found, we default to removing the first one
+    --rollover_count;
+    command_queue[min_ts_idx] = command_queue[rollover_count];
+  }
+  command_queue[rollover_count] =
+      (struct behavior_status_led_command_queue_entry){
+          .event = *event,
+          .command = {.led0 = command->led0,
+                      .led1 = command->led1,
+                      .led2 = command->led2}};
+  ++rollover_count;
+  LOG_DBG("Sending command [%d %d %d]", command->led0, command->led1,
+          command->led2);
+  k_msgq_put(&behavior_status_led_msgq, command, K_NO_WAIT);
+}
+
+inline static void clear(struct zmk_behavior_binding_event *event) {
+  struct behavior_status_led_command command;
+
+  if (rollover_count <= 1) {
+    LOG_DBG("No command queue");
+    rollover_count = 0;
+    command = (struct behavior_status_led_command){
+        .led0 = OFF,
+        .led1 = OFF,
+        .led2 = OFF,
+    };
+  } else {
+    uint8_t clear_idx = INVALID_COMMAND_IDX;
+    uint8_t max_ts_idx = INVALID_COMMAND_IDX;
+    int64_t max_ts = INT64_MIN;
+
+    for (uint8_t i = 0; i < rollover_count; ++i) {
+      if (command_queue[i].event.layer == event->layer &&
+          command_queue[i].event.position == event->position &&
+          command_queue[i].event.source == event->source) {
+        clear_idx = i;
+      } else if (command_queue[i].event.timestamp > max_ts) {
+        if (clear_idx >= 8) {
+          clear_idx = max_ts_idx + 8;
+        }
+        max_ts_idx = i;
+        max_ts = command_queue[i].event.timestamp;
+      }
+    }
+
+    if (max_ts_idx == INVALID_COMMAND_IDX) {
+      // Theoretically impossible
+      LOG_DBG("No maximum timestamp. Clearing the queue");
+      rollover_count = 0;
+      command = (struct behavior_status_led_command){
+          .led0 = OFF,
+          .led1 = OFF,
+          .led2 = OFF,
+      };
+    } else {
+      if (clear_idx < 8) {
+        LOG_DBG("Found command and next command in line");
+        // Happy path: we found the command and a max
+        command_queue[clear_idx] = command_queue[rollover_count - 1];
+        command = command_queue[max_ts_idx].command;
+      } else {
+        // Did not find the command, delete the latest one
+        command_queue[max_ts_idx] = command_queue[rollover_count - 1];
+
+        // If we have a second largest, send that, else, clear
+        if (clear_idx < 16) {
+          LOG_DBG("Did not find the command. Deleting the max timestamp and "
+                  "sending second largest");
+          command = command_queue[clear_idx - 8].command;
+        } else {
+          LOG_DBG("Did not find the command. Deleting the max timestamp and "
+                  "clearing");
+          command = (struct behavior_status_led_command){
+              .led0 = OFF,
+              .led1 = OFF,
+              .led2 = OFF,
+          };
+        }
+      }
+      --rollover_count;
+    }
+  }
+
+  LOG_DBG("Sending command [%d %d %d]", command.led0, command.led1,
+          command.led2);
+  k_msgq_put(&behavior_status_led_msgq, &command, K_NO_WAIT);
+}
+#else
+inline static void send_command(struct behavior_status_led_command *command) {
+  LOG_DBG("Sending command [%d %d %d]", command->led0, command->led1,
+          command->led2);
+  k_msgq_put(&behavior_status_led_msgq, command, K_NO_WAIT);
+}
+
+inline static void clear() {
   struct behavior_status_led_command command = {
       .led0 = OFF,
       .led1 = OFF,
       .led2 = OFF,
   };
-
-  LOG_DBG("Clearing command");
-
+  LOG_DBG("Sending command [%d %d %d]", command.led0, command.led1,
+          command.led2);
   k_msgq_put(&behavior_status_led_msgq, &command, K_NO_WAIT);
 }
+#endif // CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
 
+/*
+ * Available commands
+ */
+#if CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
+static void display_bluetooth(struct zmk_behavior_binding_event *event) {
+#else
 static void display_bluetooth() {
+#endif // CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
   LOG_DBG("Enter");
   struct behavior_status_led_command command = {
       .led0 = OFF,
@@ -131,12 +259,18 @@ static void display_bluetooth() {
     make_full_command(&command, LOW);
   }
 #endif // SPLIT
-  LOG_DBG("Sending command [%d %d %d]", command.led0, command.led1,
-          command.led2);
-  k_msgq_put(&behavior_status_led_msgq, &command, K_NO_WAIT);
+#if CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
+  send_command(event, &command);
+#else
+  send_command(&command);
+#endif // CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
 }
 
+#if CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
+static void display_battery(struct zmk_behavior_binding_event *event) {
+#else
 static void display_battery() {
+#endif // CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
   LOG_DBG("Enter");
   struct behavior_status_led_command command = {
       .led0 = OFF,
@@ -145,10 +279,14 @@ static void display_battery() {
   };
 
   uint8_t charge = zmk_battery_state_of_charge();
-  for (uint8_t i = 0; charge == 0 && i < 10; ++i) {
-    k_sleep(K_MSEC(100));
-    LOG_DBG("Retrying battery charge: %d", i);
-    charge = zmk_battery_state_of_charge();
+  if (charge == 0) {
+    LOG_DBG("Will retry charge. Clearing the LEDs");
+    k_msgq_put(&behavior_status_led_msgq, &command, K_NO_WAIT);
+    for (uint8_t i = 0; charge == 0 && i < 10; ++i) {
+      k_sleep(K_MSEC(100));
+      LOG_DBG("Retrying battery charge: %d", i);
+      charge = zmk_battery_state_of_charge();
+    }
   }
   LOG_INF("Got charge %d", charge);
 
@@ -188,10 +326,11 @@ static void display_battery() {
     command.led1 = HIGH;
     command.led0 = HIGH;
   }
-
-  LOG_DBG("Sending command [%d %d %d]", command.led0, command.led1,
-          command.led2);
-  k_msgq_put(&behavior_status_led_msgq, &command, K_NO_WAIT);
+#if CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
+  send_command(event, &command);
+#else
+  send_command(&command);
+#endif // CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
 }
 
 /*
@@ -269,6 +408,16 @@ static int behavior_status_led_init(const struct device *dev) {
 static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
                                      struct zmk_behavior_binding_event event) {
   LOG_DBG("Press with %d", binding->param1);
+#if CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
+  switch (binding->param1) {
+  case ST_BAT:
+    display_battery(&event);
+    break;
+  case ST_BLE:
+    display_bluetooth(&event);
+    break;
+  }
+#else
   switch (binding->param1) {
   case ST_BAT:
     display_battery();
@@ -277,13 +426,18 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
     display_bluetooth();
     break;
   }
+#endif // CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
   return ZMK_BEHAVIOR_OPAQUE;
 }
 
 static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
                                       struct zmk_behavior_binding_event event) {
   LOG_DBG("Release");
+#if CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
+  clear(&event);
+#else
   clear();
+#endif // CONFIG_ZMK_BEHAVIOR_STATUS_LED_ROLLOVER > 1
   return ZMK_BEHAVIOR_OPAQUE;
 }
 
