@@ -30,9 +30,9 @@ cd "${root}"
 
 function clean {
   log clean "Stopping container"
-  "${pod}" stop zmk
+  ${pod} stop zmk
   log clean "Deleting images"
-  "${pod}" images | grep zmkfirmware | awk '{system("'"${pod}"' rmi " $3)}'
+  ${pod} images | grep zmkfirmware | awk '{system("'${pod}' rmi " $3)}'
   log clean "Resetting ZMK directory"
   rm -rf "${root}/zmk"
   git checkout -- "${root}/zmk"
@@ -41,7 +41,7 @@ function clean {
 function prepare_image {
   log prepare_image "Building zmk:latest"
   cd "${root}/zmk/.devcontainer"
-  "${podBuild}" -t zmk:latest .
+  ${podBuild} -t zmk:latest .
 }
 
 function check_submodule {
@@ -54,7 +54,7 @@ function check_submodule {
 
 function check_image {
   log check_image "Checking container image existance"
-  if ! "${pod}" images --format '{{ .Repository }}:{{ .Tag }}' | grep 'zmk:latest' &>/dev/null; then
+  if ! ${pod} images --format '{{ .Repository }}:{{ .Tag }}' | grep 'zmk:latest' &>/dev/null; then
     prepare_image
   fi
 }
@@ -73,7 +73,7 @@ function run {
   fi
 
   log run "Running: [37m${@}[m"
-  "${pod}" \
+  ${pod} \
     run \
     -it \
     --rm \
