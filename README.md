@@ -120,6 +120,43 @@ For wireless and wired mode. This firmware assumes that [PillBug] is being used.
           ╰───╯       ╰───╯ ╰───╯       ╰───╯
 ```
 
+### LED encoding
+
+> [!NOTE]
+>
+> This is assuming that the board being used is the PillBug (nRF52840)
+
+> [!NOTE]
+>
+> In this section, a low frequency means a 500ms period, while high frequency means a 250ms period
+
+#### Battery
+
+If no charge is detected, all LEDs will blink at a low frequency.
+Similarly, when at 100% charge, all LEDs will blink at a high frequency.
+For all other values, the LEDs will encode the charge as such:
+
+| Charge | Bottom | Center | Top  |
+| ------ | ------ | ------ | ---- |
+| None   | Low    | Low    | Low  |
+| < 10%  | Low    | Off    | Off  |
+| < 20%  | High   | Off    | Off  |
+| < 30%  | Full   | Off    | Off  |
+| < 40%  | Full   | Low    | Off  |
+| < 50%  | Full   | High   | Off  |
+| < 60%  | Full   | Full   | Off  |
+| < 70%  | Full   | Full   | Low  |
+| < 80%  | Full   | Full   | High |
+| < 90%  | Full   | Full   | Full |
+| > 90%  | High   | High   | High |
+
+#### Bluetooth
+
+The left side LEDs will encode the currently active channel in binary with the bottom LED being the least significant bit.
+For a stable connection, the LEDs will stay fully on.
+When open for connections, they will blink at a high frequency.
+Lastly, when disconnected, they will blink at a low frequency.
+
 ### Flashing
 
 > [!NOTE]
