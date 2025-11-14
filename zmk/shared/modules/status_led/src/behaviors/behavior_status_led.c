@@ -352,11 +352,11 @@ extern void behavior_status_led_thread_main(void *, void *, void *) {
             status, command.led0, command.led1, command.led2, step);
 
     if (command.led0 == HIGH || command.led1 == HIGH || command.led2 == HIGH) {
-      timeout = K_MSEC(250);
+      timeout = K_MSEC(200);
       step += 1;
     } else if (command.led0 == LOW || command.led1 == LOW ||
                command.led2 == LOW) {
-      timeout = K_MSEC(500);
+      timeout = K_MSEC(600);
       step += 2;
     } else {
       timeout = K_FOREVER;
