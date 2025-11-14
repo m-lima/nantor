@@ -123,10 +123,20 @@ function make {
   west $(make_cmd left) && west $(make_cmd right)
 }
 
+function resetter {
+  if ! check_all; then
+    return 1
+  fi
+
+  log make "Building resetter"
+  west 'build -s app -d /shared/build/reset -b pillbug -- -DSHIELD=settings_reset -DZMK_CONFIG=/shared/config -DZMK_EXTRA_MODULES=/shared/modules/status_led'
+}
+
 case "${1}" in
   "clean") clean ;;
   "init") init ;;
   "make") make "${2}" ;;
+  "resetter") resetter ;;
   "full") clean && init && make p ;;
   "run")
     shift
